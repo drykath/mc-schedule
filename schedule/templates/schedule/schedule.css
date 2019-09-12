@@ -1,0 +1,143 @@
+table.gridschedule {
+    border-collapse: collapse;
+    border-bottom: 1px solid gray;
+    border-top: 1px solid gray;
+    margin: 0;
+}
+table.gridschedule th,
+table.gridschedule td {
+    border: 1px solid gray;
+    font-size: 12px;
+}
+table.gridschedule tr.schedule-header th {
+    text-align: center;
+}
+table.gridschedule tr.schedule-row td {
+    border-color: gray;
+    border-style: solid;
+    border-width: 0 1px;
+    padding: 0 0.5em;
+    text-align: center;
+}
+
+table.listschedule {
+    background-color: #f8f8f8;
+    width: 100%;
+}
+table.listschedule th, table.listschedule td {
+    border-color: gray;
+    border-style: solid;
+}
+table.listschedule tr.schedule-row th {
+    border-width: 1px 1px 1px 0;
+    width: 70px;
+}
+table.listschedule tr.schedule-header th,
+table.listschedule tr.schedule-row td {
+    border-width: 1px 0;
+}
+table.listschedule tr.schedule-row td {
+    padding-top: 0.5em;
+    padding-left: 0.5em;
+}
+
+tr.schedule-header th,
+tr.schedule-row th {
+    background-color: #f8f8f8;
+    color: black;
+    padding: 0.5em;
+}
+tr.schedule-row th {
+    text-align: right;
+    font-size: 10px;
+}
+
+tr.schedule-row {
+    height: 50px;
+}
+
+tr.schedule-row td div.schedule-item {
+    box-shadow: 1px 2px 3px 0px rgba(0,0,0,0.4);
+    -mox-box-shadow: 1px 2px 3px 0px rgba(0,0,0,0.4);
+    -webkit-box-shadow: 1px 2px 3px 0px rgba(0,0,0,0.4);
+    color: black;
+    border: 1px solid gray;
+    border-collapse: separate;
+    border-radius: 10px;
+}
+tr.schedule-row td div.room-item > div a.schedule-item,
+tr.schedule-row td div.schedule-item > div a.schedule-item {
+    color: black;
+    text-decoration: none;
+}
+tr.schedule-row td div.grid-item {
+    display: table;
+    height: 100%;
+    width: 100%;
+}
+tr.schedule-row td div.grid-item > div {
+    display: table-cell;
+    padding: 1em 0.5em;
+    vertical-align: middle;
+}
+tr.schedule-row td div.grid-item > div a {
+    cursor: pointer;
+}
+tr.schedule-row td div.list-item {
+    display: inline-block;
+    margin-bottom: 0.5em;
+    margin-right: 0.5em;
+}
+tr.schedule-row td div.list-item > div {
+    padding: 0.5em 1em;
+}
+
+{% for track in tracks %}
+td.room-{{track.class_name}}-open, div.track-{{track.class_name}} {
+    background-color: {{track.color}};
+}
+td.room-{{track.class_name}}-opening {
+    background: linear-gradient(0deg, {{track.color}}, white);
+    border-top: 1px dashed gray !important;
+}
+td.room-{{track.class_name}}-closing {
+    background: linear-gradient(0deg, white, {{track.color}});
+    border-bottom: 1px dashed gray !important;
+}
+{% endfor %}
+
+h3.popover-title,
+div.popover-content a,
+div.popover-content {
+    color: black;
+}
+
+div.title-wrapper {
+    border-radius: 20px;
+    padding: 5px 10px;
+}
+
+div.widetable {
+    background-image: -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, #ffffff), color-stop(100%, rgba(255, 255, 255, 0))), -webkit-gradient(linear, 100% 50%, 0% 50%, color-stop(0%, #ffffff), color-stop(100%, rgba(255, 255, 255, 0))), -webkit-gradient(linear, 0% 50%, 100% 50%, color-stop(0%, #c3c3c5), color-stop(100%, rgba(195, 195, 197, 0))), -webkit-gradient(linear, 100% 50%, 0% 50%, color-stop(0%, #c3c3c5), color-stop(100%, rgba(195, 195, 197, 0)));
+    background-image: -webkit-linear-gradient(left, #ffffff, rgba(255, 255, 255, 0)), -webkit-linear-gradient(right, #ffffff, rgba(255, 255, 255, 0)), -webkit-linear-gradient(left, #c3c3c5, rgba(195, 195, 197, 0)), -webkit-linear-gradient(right, #c3c3c5, rgba(195, 195, 197, 0));
+    background-image: -moz-linear-gradient(left, #ffffff, rgba(255, 255, 255, 0)), -moz-linear-gradient(right, #ffffff, rgba(255, 255, 255, 0)), -moz-linear-gradient(left, #c3c3c5, rgba(195, 195, 197, 0)), -moz-linear-gradient(right, #c3c3c5, rgba(195, 195, 197, 0));
+    background-image: -o-linear-gradient(left, #ffffff, rgba(255, 255, 255, 0)), -o-linear-gradient(right, #ffffff, rgba(255, 255, 255, 0)), -o-linear-gradient(left, #c3c3c5, rgba(195, 195, 197, 0)), -o-linear-gradient(right, #c3c3c5, rgba(195, 195, 197, 0));
+    background-image: linear-gradient(left, #ffffff, rgba(255, 255, 255, 0)), linear-gradient(right, #ffffff, rgba(255, 255, 255, 0)), linear-gradient(left, #c3c3c5, rgba(195, 195, 197, 0)), linear-gradient(right, #c3c3c5, rgba(195, 195, 197, 0));
+    background-position: 0 0, 100% 0, 0 0, 100% 0;
+    background-repeat: no-repeat;
+    background-color: white;
+    background-size: 4em 100%, 4em 100%, 1em 100%, 1em 100%;
+    background-attachment: local, local, scroll, scroll;
+    margin-right: 1em;
+    overflow-x: auto;
+}
+
+@media print {
+    div.widetable {
+        height: 100%;
+        overflow-x: visible;
+    }
+    footer {
+        display: none;
+    }
+}

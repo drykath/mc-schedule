@@ -1,0 +1,35 @@
+<li role="presentation" class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+        View <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu" style="z-index: 1500;">
+        <li><a href="{% url this_page addl_filter='' %}">Standard</a></li>
+        <li><a href="{% url this_page addl_filter='all' %}">All</a></li>
+        {% if user.is_authenticated %}
+            <li><a href="{% url this_page addl_filter='custom' %}">Starred/Custom</a></li>
+        {% else %}
+            <li><a href="{% url 'login' %}?next={% url this_page addl_filter='custom' %}">Log in to customize</a></li>
+        {% endif %}
+    </ul>
+</li>
+<li role="presentation" class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+        Track <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu" style="z-index: 1500;">
+        <li><a href="{% url this_page addl_filter=addl_filter %}">All</a></li>
+        {% for track in tracks %}
+            <li><a href="{% url this_page addl_filter=addl_filter %}?track={{ track.name|urlencode }}">{{ track.name }}</a></li>
+        {% endfor %}
+    </ul>
+</li>
+<li class="tab {% if this_page == 'schedule_grid' %}active {% endif %}pull-right"><a title="Grid View" href="{% url 'schedule_grid' addl_filter=addl_filter %}"><span class="glyphicon glyphicon-th" aria-hidden="true"></span></a></li>
+<li class="tab {% if this_page == 'schedule_list' %}active {% endif %}pull-right"><a title="List View" href="{% url 'schedule_list' addl_filter=addl_filter %}"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></a></li>
+<li class="tab pull-right"><a role="button" title="Download/Link" data-placement="bottom" data-toggle="popover" data-html="true" data-content="{% spaceless %}
+    <p>Download this {% if addl_filter == 'custom' %}customized {% endif %}schedule into your calendar app:</p>
+    <p><a href='{% url 'schedule_ics' addl_filter=addl_filter auth_token=auth_token %}'>{{ convention.name }} {{ addl_filter|title }} Panels</a></p>
+    <p>The app will need to support the iCalendar format (most do.) If you have an online calendar app that supports the webcal format, such as Google Calendar, it can use the link directly:</p>
+    <p><input id='ics-link' type='text' value='https://{{ convention.site.domain }}{% url 'schedule_ics' addl_filter=addl_filter auth_token=auth_token %}' size='35' readonly>
+    <br><input class='btn btn-primary' type='button' value='Copy' id='ics-copy' onclick='copyIcsLink();'></p>
+{% endspaceless %}"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span></a></li>
+

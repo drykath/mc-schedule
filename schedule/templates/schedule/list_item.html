@@ -1,0 +1,5 @@
+{% if scheduleitem.panel %}{% with panelschedule=scheduleitem %}
+<div class="track-{{panelschedule.panel.track.class_name}} schedule-item list-item"><div>{% include "schedule/panel_item.html" %}</div></div>
+{% endwith %}{% else %}{% with roomschedule=scheduleitem %}
+<div class="track-{{roomschedule.room.track.class_name}} schedule-item list-item"><div>{% include "schedule/room_item.html" %}</div></div>
+{% endwith %}{% endif %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block extra_js %}
+    <script src="{% static 'js/jquery.floatThead.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'schedule/js/schedule.js' %}" type="text/javascript"></script>
+{% endblock %}
+{% block extra_head %}
+    <link rel="stylesheet" type="text/css" media="screen, print" href="{% url 'schedule_css' %}">
+{% endblock %}
+{% block content %}
+<div class="container box">
+    <h3 class="page-header">{% block meta_title %}{{ convention.name }} {% if addl_filter == 'all' %}All Panels and Rooms{% elif addl_filter == 'custom' %}Custom Panels{% endif %} Schedule{% endblock %}</h3>
+    <div class="container-fluid" id="navtabs">
+        <ul class="nav nav-tabs">
+            {% block navtabs %}{% endblock %}
+        </ul>
+    </div>
+    <div class="tab-content">
+        {% block schedule %}{% endblock %}
+    </div>
+</div>
+<script type="text/javascript">
+var csrf = '{{ csrf_token }}';
+$.ajaxSetup({
+  beforeSend: function(xhr) {
+    xhr.setRequestHeader('X-CSRFTOKEN', csrf);
+  }
+});
+</script>
+{% endblock %}

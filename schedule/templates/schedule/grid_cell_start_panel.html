@@ -1,0 +1,1 @@
+<td class="{% if roomschedule %}room-{{roomschedule.room.track.class_name}}-open{% else %}room-closed{% endif %}" rowspan="{{panelschedule.grid_draw_height}}"><div class="track-{{panelschedule.panel.track.class_name}} schedule-item grid-item"><div>{% include "schedule/panel_item.html" with displaytimes=True %}</div></div></td>

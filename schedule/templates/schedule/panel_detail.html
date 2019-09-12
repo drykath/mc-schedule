@@ -1,0 +1,67 @@
+{% extends "schedule/base.html" %}
+{% block content %}
+<div class="container box">
+    <h3 class="page-header">
+        {% with attendee_pref=panelschedule.panel.attendee_info.0 %}<span class="icon_{{ panelschedule.panel.id }} glyphicon{% if attendee_pref.feedback %} glyphicon-ok{% elif attendee_pref.hide_from_user %} glyphicon-remove{% elif attendee_pref.starred %} glyphicon-star{% endif %}" aria-hidden="true"></span>{% endwith %}
+        {% block meta_title %}{{ panelschedule.panel.title }} | Schedule{% endblock %} for {{ panelschedule.panel.convention.name }}
+    </h3>
+    <div>{% if referer %}
+        <a href="{% url referer addl_filter=addl_filter %}#{{ panelschedule.get_day_display|lower }}"><span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span> Back to Schedule</a>
+    {% else %}
+        <a href="{% url 'schedule_default' %}"><span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span> See full schedule</a>
+    {% endif %}</div>
+    <div class="title-wrapper track-{{ panelschedule.panel.track.class_name }}">
+        <h4>Track: {{ panelschedule.panel.track.name }}</h4>
+        <h4>Room: {{ panelschedule.panel.room.name }}{% if panelschedule.panel.room.alias %} ({{ panelschedule.panel.room.alias }}){% endif %}</h4>
+    </div>
+    <div class="panel-content"{% if request_user.is_authenticated %}{% with attendee_pref=panelschedule.panel.attendee_info.0 %}{% if attendee_pref and attendee_pref.starred %}data-starred="true" {% endif %}{% if attendee_pref and attendee_pref.hide_from_user %}data-hide="true" {% endif %}{% endwith %}{% endif %}>{% spaceless %}
+        {% if request_user.is_authenticated %}{% with attendee_pref=panelschedule.panel.attendee_info.0 %}{% if not panelschedule.past %}
+            <p><small>
+                <a href='{% url 'schedule_set_preference' panel_id=panelschedule.panel.id pref='unstar' %}' data-panel='{{ panelschedule.panel.id }}' data-pref='unstar' class='setpref'{% if not attendee_pref.starred %} style='display: none;'{% endif %}><span class='glyphicon glyphicon-star-empty' aria-hidden='true'></span> Un-mark this panel</a>
+                <a href='{% url 'schedule_set_preference' panel_id=panelschedule.panel.id pref='star' %}' data-panel='{{ panelschedule.panel.id }}' data-pref='star' class='setpref'{% if attendee_pref.starred %} style='display: none;'{% endif %}><span class='glyphicon glyphicon-star' aria-hidden='true'></span> Mark this panel</a>
+                <a href='{% url 'schedule_set_preference' panel_id=panelschedule.panel.id pref='unhide' %}' data-panel='{{ panelschedule.panel.id }}' data-pref='unhide' class='setpref'{% if not attendee_pref.hide_from_user %} style='display: none;'{% endif %}><span class='glyphicon glyphicon-ok' aria-hidden='true'></span> Un-hide panel</a>
+                <a href='{% url 'schedule_set_preference' panel_id=panelschedule.panel.id pref='hide' %}' data-panel='{{ panelschedule.panel.id }}' data-pref='hide' class='setpref'{% if attendee_pref.hide_from_user %} style='display: none;'{% endif %}><span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Hide panel</a>
+            </small></p>
+        {% else %}
+            <form method='POST' action='{% url 'schedule_set_preference' panel_id=panelschedule.panel.id pref='' %}' data-panel='{{ panelschedule.panel.id }}'>
+                <small>Did you attend this panel?</small><br><div class='btn-group-toggle' data-toggle='buttons'>
+                    <label class='btn btn-primary active'><input type='radio' name='attended' value='True' checked>Yes</label>
+                    <label class='btn btn-primary'><input type='radio' name='attended' value='False'>No</label>
+                </div>
+                <small>Feedback:</small><br><textarea name='feedback'>{% if attendee_pref.feedback %}{{ attendee_pref.feedback }}{% endif %}</textarea><br>
+                <button type='submit' class='btn btn-primary'>Save</button>
+            </form>
+            <hr>
+        {% endif %}{% endwith %}{% endif %}
+        {{panelschedule.panel.description|linebreaksbr}}
+        <br><br>
+        <strong>Hosts:</strong> {{panelschedule.panel.hosts}}<br>
+        <strong>Room:</strong> {{ panelschedule.panel.room.name }}{% if panelschedule.panel.room.alias %} ({{ panelschedule.panel.room.alias }}){% endif %}<br>
+        <strong>{{panelschedule.get_day_display}}</strong>,  {{panelschedule.start_time|time}} to {{panelschedule.end_time|time}}
+        {% if other_times %}
+            <h4>This panel is scheduled at the following additional times:</h4>
+            {% for otherpanel in other_times %}
+                <a href="{% url 'schedule_panel_detail' otherpanel.id otherpanel.panel.title|slugify %}"><strong>{{ otherpanel.get_day_display }}</strong>, {{otherpanel.start_time|time}} to {{otherpanel.end_time|time}}</a><br>
+            {% endfor %}
+        {% endif %}
+
+        {% if panelschedule.panel.map_image %}
+            <div><strong>Map:</strong><br>
+                <img class="img-responsive" src="{{ panelschedule.panel.map_image.url }}">
+            </div>
+        {% elif panelschedule.panel.room.map_image %}
+            <div><strong>Map:</strong><br>
+                <img class="img-responsive" src="{{ panelschedule.panel.room.map_image.url }}">
+            </div>
+        {% endif %}
+    {% endspaceless %}</div>
+</div>
+<script type="text/javascript">
+var csrf = '{{ csrf_token }}';
+$.ajaxSetup({
+  beforeSend: function(xhr) {
+    xhr.setRequestHeader('X-CSRFTOKEN', csrf);
+  }
+});
+</script>
+{% endblock %}

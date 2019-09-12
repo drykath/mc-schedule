@@ -1,0 +1,4 @@
+include LICENSE
+include README.md
+recursive-include schedule/static *
+recursive-include schedule/templates *

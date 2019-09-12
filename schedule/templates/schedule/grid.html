@@ -1,0 +1,40 @@
+{% extends "schedule/base.html" %}
+
+{% block navtabs %}
+    {% for day, day_struct in days.items %}
+        <li class="tab{% if today == day or today is None and forloop.first %} active{% endif %}"><a data-toggle="tab" data-long="{{day}}" data-short="{{day|slice:":3" }}" href="#{{ day|lower }}" id="{{ day|lower }}-tab">{{day}}</a></li>
+    {% endfor %}
+    {% include 'schedule/filters.html' with this_page='schedule_grid' %}
+{% endblock %}
+
+{% block schedule %}
+    {% for day, day_struct in days.items %}
+        <div id="{{ day|lower }}" class="tab-pane fade{% if today == day or today is None and forloop.first %} in active{% endif %}">
+            <div class="widetable">
+                <table class="schedule gridschedule">
+                    <thead>
+                        <tr class="schedule-header">
+                            <th class="text-center"><nobr>Rooms <i style="z-index: 0;" class="glyphicon glyphicon-arrow-right" aria-hidden="true"></i></nobr>
+                              <br /><nobr><i style="z-index: 0;" class="glyphicon glyphicon-arrow-down" aria-hidden="true"></i>Time</nobr></th>
+                            {% for room in day_struct.rooms %}
+                                <th><nobr>{{ room.name }}</nobr>{% if room.alias %}<br><small>{{ room.alias }}</small>{% endif %}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tm, rooms in day_struct.schedule.items %}
+                            {# Write out the time for this row, only on the hour #}
+                            <tr class="schedule-row">
+                                <th>{% if tm.minute == 0 %}<nobr>{{ tm|time }}</nobr>{% endif %}</th>
+                                {# Follow the same room list order for the columns to search for events #}
+                                {% for room, room_struct in rooms.items %}
+                                    {% include room_struct.cell_template with panelschedule=room_struct.panelschedule roomschedule=room_struct.roomschedule request_user=request_user only %}
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

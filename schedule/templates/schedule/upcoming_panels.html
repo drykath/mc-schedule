@@ -1,0 +1,21 @@
+{% if panelschedules %}
+<div id="recent-news" class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Upcoming Panels &amp; Events</h3>
+    </div>
+    <ul class="list-group">
+        {% for panelschedule in panelschedules %}
+            <li class="list-group-item">
+                <a href="{% url 'schedule_panel_detail' panelschedule.id panelschedule.panel.title|slugify %}">
+                    {% with attendee_pref=panelschedule.panel.attendee_info.0 %}<span class="icon_{{ panelschedule.panel.id }} glyphicon{% if attendee_pref.feedback %} glyphicon-ok{% elif attendee_pref.hide_from_user %} glyphicon-remove{% elif attendee_pref.starred %} glyphicon-star{% endif %}" aria-hidden="true"></span>{% endwith %}{{panelschedule.panel.title}}
+                </a>
+                <p>
+                    <strong>{{panelschedule.get_day_display}}</strong>, {{panelschedule.start_time|time}} to {{panelschedule.end_time|time}}
+                    <br>
+                    {{panelschedule.panel.room.name}}{% if panelschedule.panel.room.alias %} ({{ panelschedule.panel.room.alias }}){% endif %}
+                </p>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
