@@ -1,4 +1,5 @@
 from django import template
+from django.conf import settings
 from django.db.models import Prefetch
 from django.utils import timezone
 from convention import get_convention_model
@@ -16,6 +17,10 @@ def upcoming_panels(addl_filter='', limit=5, include_current=True, user=None):
     '''
 
     # TODO: Consider eventually leveraging views.Schedule
+
+    # Return an empty list to hide from public view
+    if not getattr(settings, 'SCHEDULE_IS_PUBLIC', True):
+        return {'panelschedules': []}
 
     if addl_filter not in ['', 'custom', 'all']:
         raise template.TemplateSyntaxError(
