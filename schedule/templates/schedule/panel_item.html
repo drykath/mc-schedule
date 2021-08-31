@@ -29,7 +29,8 @@
         {{panelschedule.panel.room.name}}{% if panelschedule.panel.room.alias %} ({{ panelschedule.panel.room.alias }}){% endif %}
         <br><br>
         <a class='schedule-item schedule-item-detail' href='{% url 'schedule_panel_detail' panelschedule.id panelschedule.panel.title|slugify %}'><span class='glyphicon glyphicon-link' aria-hidden='true'></span> Details/Link to this panel</a>
-    {% endspaceless %}">
+    {% endspaceless %}"
+    href="{% url 'schedule_panel_detail' panelschedule.id panelschedule.panel.title|slugify %}">
     {% if displaytimes %}
         <small><nobr>{{panelschedule.start_time|time}} - {{panelschedule.end_time|time}}</nobr></small><br>
     {% endif %}

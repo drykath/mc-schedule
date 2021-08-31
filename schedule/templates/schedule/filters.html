@@ -3,13 +3,16 @@
         View <span class="caret"></span>
     </a>
     <ul class="dropdown-menu" style="z-index: 1500;">
-        <li><a href="{% url this_page addl_filter='' %}">Standard</a></li>
-        <li><a href="{% url this_page addl_filter='all' %}">All</a></li>
+        <li><a href="{% url this_page addl_filter='' %}">Standard View</a></li>
+        <li><a href="{% url this_page addl_filter='all' %}">Show All Events</a></li>
         {% if user.is_authenticated %}
-            <li><a href="{% url this_page addl_filter='custom' %}">Starred/Custom</a></li>
+            <li><a href="{% url this_page addl_filter='custom' %}">Only My Starred Events</a></li>
         {% else %}
             <li><a href="{% url 'login' %}?next={% url this_page addl_filter='custom' %}">Log in to customize</a></li>
         {% endif %}
+        <hr>
+        <li class="{% if this_page == 'schedule_grid' %}active{% endif %}"><a href="{% url 'schedule_grid' addl_filter=addl_filter %}">Grid View</a></li>
+        <li class="{% if this_page == 'schedule_list' %}active{% endif %}"><a href="{% url 'schedule_list' addl_filter=addl_filter %}">List View</a></li>
     </ul>
 </li>
 <li role="presentation" class="dropdown">
@@ -23,8 +26,6 @@
         {% endfor %}
     </ul>
 </li>
-<li class="tab {% if this_page == 'schedule_grid' %}active {% endif %}pull-right"><a title="Grid View" href="{% url 'schedule_grid' addl_filter=addl_filter %}"><span class="glyphicon glyphicon-th" aria-hidden="true"></span></a></li>
-<li class="tab {% if this_page == 'schedule_list' %}active {% endif %}pull-right"><a title="List View" href="{% url 'schedule_list' addl_filter=addl_filter %}"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></a></li>
 <li class="tab pull-right"><a role="button" title="Download/Link" data-placement="bottom" data-toggle="popover" data-html="true" data-content="{% spaceless %}
     <p>Download this {% if addl_filter == 'custom' %}customized {% endif %}schedule into your calendar app:</p>
     <p><a href='{% url 'schedule_ics' addl_filter=addl_filter auth_token=auth_token %}'>{{ convention.name }} {{ addl_filter|title }} Panels</a></p>

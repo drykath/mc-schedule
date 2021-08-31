@@ -18,9 +18,10 @@
         {% if request_user.is_authenticated %}{% with attendee_pref=panelschedule.panel.attendee_info.0 %}{% if not panelschedule.past %}
             <p><small>
                 <a href='{% url 'schedule_set_preference' panel_id=panelschedule.panel.id pref='unstar' %}' data-panel='{{ panelschedule.panel.id }}' data-pref='unstar' class='setpref'{% if not attendee_pref.starred %} style='display: none;'{% endif %}><span class='glyphicon glyphicon-star-empty' aria-hidden='true'></span> Un-mark this panel</a>
-                <a href='{% url 'schedule_set_preference' panel_id=panelschedule.panel.id pref='star' %}' data-panel='{{ panelschedule.panel.id }}' data-pref='star' class='setpref'{% if attendee_pref.starred %} style='display: none;'{% endif %}><span class='glyphicon glyphicon-star' aria-hidden='true'></span> Mark this panel</a>
+                <a href='{% url 'schedule_set_preference' panel_id=panelschedule.panel.id pref='star' %}' data-panel='{{ panelschedule.panel.id }}' data-pref='star' class='setpref'{% if attendee_pref.starred %} style='display: none;'{% endif %}><span class='glyphicon glyphicon-star' aria-hidden='true'></span> Mark this panel / I want to attend</a>
+                <br>
                 <a href='{% url 'schedule_set_preference' panel_id=panelschedule.panel.id pref='unhide' %}' data-panel='{{ panelschedule.panel.id }}' data-pref='unhide' class='setpref'{% if not attendee_pref.hide_from_user %} style='display: none;'{% endif %}><span class='glyphicon glyphicon-ok' aria-hidden='true'></span> Un-hide panel</a>
-                <a href='{% url 'schedule_set_preference' panel_id=panelschedule.panel.id pref='hide' %}' data-panel='{{ panelschedule.panel.id }}' data-pref='hide' class='setpref'{% if attendee_pref.hide_from_user %} style='display: none;'{% endif %}><span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Hide panel</a>
+                <a href='{% url 'schedule_set_preference' panel_id=panelschedule.panel.id pref='hide' %}' data-panel='{{ panelschedule.panel.id }}' data-pref='hide' class='setpref'{% if attendee_pref.hide_from_user %} style='display: none;'{% endif %}><span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Hide panel / Not interested</a>
             </small></p>
         {% else %}
             <form method='POST' action='{% url 'schedule_set_preference' panel_id=panelschedule.panel.id pref='' %}' data-panel='{{ panelschedule.panel.id }}'>
