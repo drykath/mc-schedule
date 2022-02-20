@@ -181,7 +181,7 @@ class Attendee(models.Model):
     panel = models.ForeignKey(Panel, on_delete=models.PROTECT)
     starred = models.BooleanField(default=False)
     hide_from_user = models.BooleanField(default=False)
-    attended = models.NullBooleanField()
+    attended = models.BooleanField(null=True)
     feedback = models.TextField(null=True, blank=True)
 
     class Meta:
