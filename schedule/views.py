@@ -410,7 +410,7 @@ def panel_detail(request, panelschedule_id, **kwargs):
                          queryset=Attendee.objects.filter(user=request.user),
                          to_attr='attendee_info')
             )
-        panelschedule = panelobjects.get(id=panelschedule_id)
+        panelschedule = panelobjects.get(id=panelschedule_id, panel__hidden=False)
     except PanelSchedule.DoesNotExist:
         raise Http404("No panel found with that ID.")
 
