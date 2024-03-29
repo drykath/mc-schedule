@@ -12,7 +12,8 @@
         {% endif %}
         <hr>
         <li class="{% if this_page == 'schedule_grid' %}active{% endif %}"><a href="{% url 'schedule_grid' addl_filter=addl_filter %}">Grid View</a></li>
-        <li class="{% if this_page == 'schedule_list' %}active{% endif %}"><a href="{% url 'schedule_list' addl_filter=addl_filter %}">List View</a></li>
+        <li class="{% if this_page == 'schedule_list' %}active{% endif %}"><a href="{% url 'schedule_list' addl_filter=addl_filter %}">Short List View</a></li>
+        <li class="{% if this_page == 'schedule_full' %}active{% endif %}"><a href="{% url 'schedule_full' addl_filter=addl_filter %}">Expanded View</a></li>
     </ul>
 </li>
 <li role="presentation" class="dropdown">

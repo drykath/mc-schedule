@@ -1,0 +1,32 @@
+{% extends "schedule/base.html" %}
+
+{% block navtabs %}
+    {% include 'schedule/filters.html' with this_page='schedule_full' %}
+{% endblock %}
+
+{% block schedule %}
+    {% for day, day_struct in days.items %}
+        <div id="{{ day|lower }}" class="">
+            <table class="schedule listschedule">
+                <thead>
+                    <tr class="schedule-header">
+                        <th colspan="2">{{ day }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tm, scheduleitems in day_struct.schedule.items %}
+                        {# Write out this row, only if there are any panels present #}
+                        {% if scheduleitems %}
+                            <tr class="schedule-row">
+                                <th><nobr>{{ tm|time }}</nobr></th>
+                                <td>{% for scheduleitem in scheduleitems %}
+                                    {% include "schedule/full_item.html" with scheduleitem=scheduleitem request_user=request_user only %}
+                                {% endfor %}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endfor %}
+{% endblock %}

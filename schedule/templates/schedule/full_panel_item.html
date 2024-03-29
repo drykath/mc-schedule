@@ -1,0 +1,28 @@
+    <div class="title-wrapper track-{{ panelschedule.panel.track.class_name }}">
+        <h4>
+            {% with attendee_pref=panelschedule.panel.attendee_info.0 %}<span class="icon_{{ panelschedule.panel.id }} glyphicon{% if attendee_pref.feedback %} glyphicon-ok{% elif attendee_pref.hide_from_user %} glyphicon-remove{% elif attendee_pref.starred %} glyphicon-star{% endif %}" aria-hidden="true"></span>{% endwith %}
+            {{ panelschedule.panel.title }}
+        </h4>
+        <h5>Track: {{ panelschedule.panel.track.name }}</h5>
+        <h5>Room: {{ panelschedule.panel.room.name }}{% if panelschedule.panel.room.alias %} ({{ panelschedule.panel.room.alias }}){% endif %}</h5>
+    </div>
+    <div class="panel-content"{% if request_user.is_authenticated %}{% with attendee_pref=panelschedule.panel.attendee_info.0 %}{% if attendee_pref and attendee_pref.starred %}data-starred="true" {% endif %}{% if attendee_pref and attendee_pref.hide_from_user %}data-hide="true" {% endif %}{% endwith %}{% endif %}>{% spaceless %}
+        {% if request_user.is_authenticated %}{% with attendee_pref=panelschedule.panel.attendee_info.0 %}{% if not panelschedule.past %}
+            <p><small>
+                <a href='{% url 'schedule_set_preference' panel_id=panelschedule.panel.id pref='unstar' %}' data-panel='{{ panelschedule.panel.id }}' data-pref='unstar' class='setpref'{% if not attendee_pref.starred %} style='display: none;'{% endif %}><span class='glyphicon glyphicon-star-empty' aria-hidden='true'></span> Un-mark this panel</a>
+                <a href='{% url 'schedule_set_preference' panel_id=panelschedule.panel.id pref='star' %}' data-panel='{{ panelschedule.panel.id }}' data-pref='star' class='setpref'{% if attendee_pref.starred %} style='display: none;'{% endif %}><span class='glyphicon glyphicon-star' aria-hidden='true'></span> Mark this panel / I want to attend</a>
+                <br>
+                <a href='{% url 'schedule_set_preference' panel_id=panelschedule.panel.id pref='unhide' %}' data-panel='{{ panelschedule.panel.id }}' data-pref='unhide' class='setpref'{% if not attendee_pref.hide_from_user %} style='display: none;'{% endif %}><span class='glyphicon glyphicon-ok' aria-hidden='true'></span> Un-hide panel</a>
+                <a href='{% url 'schedule_set_preference' panel_id=panelschedule.panel.id pref='hide' %}' data-panel='{{ panelschedule.panel.id }}' data-pref='hide' class='setpref'{% if attendee_pref.hide_from_user %} style='display: none;'{% endif %}><span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Hide panel / Not interested</a>
+            </small></p>
+        {% endif %}{% endwith %}{% endif %}
+
+        <p>
+            {{panelschedule.panel.description|linebreaksbr}}
+            <br><br>
+            <strong>Hosts:</strong> {{panelschedule.panel.hosts}}<br>
+            <strong>Room:</strong> {{ panelschedule.panel.room.name }}{% if panelschedule.panel.room.alias %} ({{ panelschedule.panel.room.alias }}){% endif %}<br>
+            <strong>{{panelschedule.get_day_display}}</strong>,  {{panelschedule.start_time|time}} to {{panelschedule.end_time|time}}<br>
+            <a class='schedule-item schedule-item-detail' href='{% url 'schedule_panel_detail' panelschedule.id panelschedule.panel.title|slugify %}'><span class='glyphicon glyphicon-link' aria-hidden='true'></span> Details/Link to this panel</a>
+        </p>
+    {% endspaceless %}</div>

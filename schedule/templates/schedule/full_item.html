@@ -1,0 +1,5 @@
+{% if scheduleitem.panel %}{% with panelschedule=scheduleitem %}
+<div class="full-item">{% include "schedule/full_panel_item.html" %}</div>
+{% endwith %}{% else %}{% with roomschedule=scheduleitem %}
+<div class="full-item">{% include "schedule/full_room_item.html" %}</div>
+{% endwith %}{% endif %}

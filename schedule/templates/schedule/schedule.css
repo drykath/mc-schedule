@@ -92,6 +92,26 @@ tr.schedule-row td div.list-item > div {
     padding: 0.5em 1em;
 }
 
+div.full-item {
+    border: 1px solid gray;
+    border-radius: 20px;
+    color: black;
+    margin: 0 10px 10px 0;
+}
+div.full-item a {
+    color: black;
+}
+div.full-item h4 {
+    margin: 0;
+}
+div.full-item h5 {
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+div.full-item p {
+    padding: 5px 10px;
+}
+
 {% for track in tracks %}
 td.room-{{track.class_name}}-open, div.track-{{track.class_name}} {
     background-color: {{track.color}};
@@ -115,6 +135,7 @@ div.popover-content {
 div.title-wrapper {
     border-radius: 20px;
     padding: 5px 10px;
+    color: black;
 }
 
 div.widetable {

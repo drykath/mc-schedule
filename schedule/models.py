@@ -111,7 +111,7 @@ class ItemSchedule(models.Model):
 
     @property
     def end_timestamp(self):
-        "Try to compute this panel's real start time and date"
+        "Try to compute this panel's real end time and date"
         if hasattr(self, 'panel'):
             parent = self.panel
         else:
@@ -135,6 +135,11 @@ class ItemSchedule(models.Model):
         if self.end_timestamp < timezone.now().replace(tzinfo=timezone.get_current_timezone()):
             return True
         return False
+
+    @property
+    def duration(self):
+        '''How long this panel is'''
+        return self.end_timestamp - self.start_timestamp
 
     def adjust_render_start(self, tm):
         self._render_start = tm

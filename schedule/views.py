@@ -17,8 +17,6 @@ from .crypto import create_token, parse_token
 from .models import Attendee, Panel, PanelSchedule, RoomSchedule, Track
 from .utils import contime, time_range, time_round
 
-current_convention = get_convention_model().objects.current()
-
 
 class Schedule(View):
     '''
@@ -37,10 +35,11 @@ class Schedule(View):
     user = None
 
     def dispatch(self, request, addl_filter='', convention=None, **kwargs):
+        self.current_convention = get_convention_model().objects.current()
         # Load in convention and user instance variables
         self.convention = convention
         if not convention:
-            self.convention = current_convention
+            self.convention = self.current_convention
         if not self.user and request.user.is_authenticated:
             self.user = request.user
 
@@ -100,7 +99,7 @@ class Schedule(View):
 
         if self.addl_filter != 'all':
             # Filter our not-all views by date, and later time, if the convention has started
-            if self.convention == current_convention \
+            if self.convention == self.current_convention \
                 and self.convention.start_date < timezone.now().date():
                 self.panelschedules = self.panelschedules.exclude(
                     day__lt=self.convention.start_date.weekday())
@@ -120,7 +119,7 @@ class Schedule(View):
                     self.roomschedules = RoomSchedule.objects.none()
 
         if 'track' in self.request.GET.keys():
-            track = get_object_or_404(Track, name=self.request.GET['track'], convention=current_convention)
+            track = get_object_or_404(Track, name=self.request.GET['track'], convention=self.current_convention)
             self.panelschedules = self.panelschedules.filter(panel__track=track)
             self.roomschedules = self.roomschedules.filter(room__track=track)
 
@@ -228,6 +227,14 @@ class ScheduleList(Schedule):
             del day_struct['roomschedules']
 
         return {'days': days}
+
+
+class ScheduleFull(ScheduleList):
+    '''
+    ScheduleFull works pretty much identically to ScheduleList, just
+    with a different template.
+    '''
+    template_name = 'schedule/full.html'
 
 
 class ScheduleGrid(Schedule):
@@ -439,7 +446,7 @@ def generate_css(request, convention=None):
     '''Gather track list for this convention and build CSS'''
 
     if not convention:
-        convention = current_convention
+        convention = get_convention_model().objects.current()
 
     tracks = Track.objects.filter(convention=convention)
 

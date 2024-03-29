@@ -1,0 +1,14 @@
+    <div class="title-wrapper track-{{ roomschedule.room.track.class_name }}">
+        <h4>
+            {{ roomschedule.room.name }}
+        </h4>
+        <h5>Track: {{ roomschedule.room.track.name }}</h5>
+        <h5>Room: {{ roomschedule.room.name }}{% if roomschedule.room.alias %} ({{ roomschedule.room.alias }}){% endif %}</h5>
+    </div>
+    <div class="room-content">{% spaceless %}
+        <p>
+            {{roomschedule.room.description|linebreaksbr}}
+            <br><br>
+            {% if roomschedule.room.always_open %}Open 24 hours{% else %}<strong>{{roomschedule.get_day_display}}</strong>, {{roomschedule.start_time|time}} to {{roomschedule.end_time|time}}{% endif %}
+        </p>
+    {% endspaceless %}</div>
